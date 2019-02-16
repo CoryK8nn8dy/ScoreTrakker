@@ -1,10 +1,15 @@
+// Tanner Coggins
+// Cory Kennedy
+
+
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class ScoreTrakker {
 	
-	
+	private String[] files = {"scores.txt", "badscore.txt", "nofile.txt"};
 	
 	public ScoreTrakker(List students) {
 		super();
@@ -13,11 +18,13 @@ public class ScoreTrakker {
 	
 	private static List students = new ArrayList(10);
 	
-	public void loadDataFromFile(String fileName) throws IOException {
+	public void loadDataFromFile(String fileName) throws FileNotFoundException   {
 		
-		int i = 0;
-		
+
 		FileReader reader = new FileReader(fileName);
+
+		
+		
 		
 		Scanner in = new Scanner(reader);
 		
@@ -25,17 +32,27 @@ public class ScoreTrakker {
 			// Bring in two lines of the txt file
 			String name = in.nextLine();
 			String score = in.nextLine();
-			
+			int result = 0;
 			// Convert score to an integer
-			int result = Integer.parseInt(score);
+			try {
+				result = Integer.parseInt(score);
+			} catch (NumberFormatException e) {
+				System.out.println("Incorrect format for " + name + " not a valid score: " + score);
+			}
+			
 			// TODO Add some error handling
-		
+			
 			// Declare student object and place into the Arraylist
 			Student student = new Student(name, result);
 			students.add(student);		
 		}
 		
-		reader.close();
+		try {
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		
 		
 		
@@ -48,18 +65,29 @@ public class ScoreTrakker {
 
 			System.out.println(stud);
 		}
-		
+		System.out.println("\n");
 	}
 	
 
-	public void processFiles() throws IOException {
-		
-		loadDataFromFile("scores.txt");
-		printInOrder();
+	public void processFiles() {
+
+		for (String file: files) {
+			
+			try {
+				
+				loadDataFromFile(file);
+				printInOrder();
+				
+			} catch(FileNotFoundException e2) {
+				System.out.println("Can't open file: " + file);
+			}
+			
+		}
+
 		
 	}
 	
-	public static void main(String [] args) throws IOException {
+	public static void main(String [] args)  {
 
 		ScoreTrakker tracker = new ScoreTrakker(students);
 		tracker.processFiles();
