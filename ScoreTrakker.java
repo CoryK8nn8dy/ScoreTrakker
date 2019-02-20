@@ -62,10 +62,10 @@ public class ScoreTrakker {
 
 		Collections.sort(students);
 		for(Object stud : students) {
-
 			System.out.println(stud);
 		}
 		System.out.println("\n");
+		students.clear(); // clear added 2/19
 	}
 	
 
